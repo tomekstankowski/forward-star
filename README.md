@@ -1,7 +1,7 @@
 # Forward star graph representation implemeted with Python C API
 
 # Install
-Scripts were written in Python 3.7. You need to have ```python-dev``` package installed.<br/><br/>
+Scripts were written in Python 3.6. You need to have ```python-dev``` package installed.<br/><br/>
 To build module's shared library, run:<br/>
 ```python3 setup.py build```<br/><br/>
 To add ```simplegraphs``` module to your system, run:<br/>
