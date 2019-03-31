@@ -16,16 +16,6 @@ static PyObject *G6Error;
 static PyObject *NoVerticesError;
 static PyObject *TooManyVerticesError;
 
-static PyObject *ForwardStar__new__(PyTypeObject *type, PyObject *args)
-{
-    return type->tp_alloc(type, 0);
-}
-
-static void ForwardStar__del__(ForwardStar *self)
-{
-    Py_TYPE(self)->tp_free((PyObject *)self);
-}
-
 static PyObject *fromString(ForwardStar *self, PyObject *args)
 {
     char *text;
@@ -297,15 +287,6 @@ static PyObject *__str__(const ForwardStar *const self)
     return PyUnicode_FromFormat("%s", str);
 }
 
-static PyObject *__pntrs__(const ForwardStar *self)
-{
-    char str[1024];
-    int i, index = 0;
-    for (i = 0; i < self->v + 1; i++)
-        index += sprintf(str + index, "%d", self->pntrs[i]);
-    return PyUnicode_FromFormat("%s", str);
-}
-
 static PyMethodDef ForwardStarMethods[] = {
     {"order", (PyCFunction)order, METH_NOARGS, "Zwraca liczbę wierzchołków grafu."},
     {"addVertex", (PyCFunction)addVertex, METH_NOARGS, "Dodaje do grafu nowy izolowany wierzchołek."},
@@ -317,7 +298,6 @@ static PyMethodDef ForwardStarMethods[] = {
     {"__str__", (PyCFunction)__str__, METH_NOARGS, "Przekształca graf w reprezentację tekstową."},
     {"__eq__", (PyCFunction)__eq__, METH_O, "Test równości dwóch reprezentacji grafów."},
     {"__ne__", (PyCFunction)__ne__, METH_O, "Test różności dwóch reprezentacji grafów."},
-    {"__pntrs__", (PyCFunction)__pntrs__, METH_NOARGS, "Test różności dwóch reprezentacji grafów."},
     {NULL}};
 
 static PyTypeObject ForwardStarType = {
@@ -328,9 +308,8 @@ static PyTypeObject ForwardStarType = {
     .tp_itemsize = 0,
     .tp_str = (reprfunc)__str__,
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-    .tp_new = (newfunc)ForwardStar__new__,
+    .tp_new = PyType_GenericNew,
     .tp_init = (initproc)ForwardStar__init__,
-    .tp_del = (destructor)ForwardStar__del__,
     .tp_methods = ForwardStarMethods,
 };
 
